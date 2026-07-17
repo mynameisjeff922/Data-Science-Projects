@@ -1,0 +1,44 @@
+# import libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# load the csv file
+data = pd.read_csv('countries.csv')
+data.head()
+
+# split the data by continent, then get 1952 only
+asia = data[data.continent == 'Asia']
+africa = data[data.continent == 'Africa']
+
+asia_1952 = asia[asia.year == 1952]
+africa_1952 = africa[africa.year == 1952]
+
+# time series of average life expectancy for both continents
+asia_by_year = asia.groupby('year').lifeExpectancy.mean()
+africa_by_year = africa.groupby('year').lifeExpectancy.mean()
+
+plt.plot(asia_by_year.index, asia_by_year.values, label='Asia')
+plt.plot(africa_by_year.index, africa_by_year.values, label='Africa')
+plt.title('Life Expectancy: Asia vs Africa')
+plt.xlabel('Year')
+plt.ylabel('Life expectancy')
+plt.legend()
+plt.show()
+
+# compare the two histograms side by side using subplot
+plt.figure(figsize=(10, 4))
+
+plt.subplot(1, 2, 1)
+plt.hist(asia_1952.lifeExpectancy, bins=20, range=(25, 70))
+plt.title('Asia 1952')
+plt.xlabel('Life expectancy')
+plt.ylabel('Countries')
+
+plt.subplot(1, 2, 2)
+plt.hist(africa_1952.lifeExpectancy, bins=20, range=(25, 70))
+plt.title('Africa 1952')
+plt.xlabel('Life expectancy')
+plt.ylabel('Countries')
+
+plt.tight_layout()
+plt.show()
